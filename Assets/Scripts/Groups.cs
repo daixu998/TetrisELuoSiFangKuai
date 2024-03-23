@@ -6,6 +6,10 @@ public class Groups : MonoBehaviour
 {
     float lastFall;
     public float Speed = 1f;
+    public bool isSpeedUp = false;
+    private float buttonDownTime = 0;
+    // Start is called before the first frame update
+
     void Start()
     {
         if (isValidGrifPos())
@@ -17,7 +21,7 @@ public class Groups : MonoBehaviour
             Debug.Log("Game Over");
             Destroy(gameObject);
 
-            FindObjectOfType<Spawner>().isGameOver = false;
+            Spawner.instance.isGameOver = false;
         }
 
 
@@ -67,9 +71,9 @@ public class Groups : MonoBehaviour
         }
         //向下
 
-        else if (Input.GetKey(KeyCode.DownArrow) || Time.time - lastFall >= Speed
-        )
+        else if (Input.GetKey(KeyCode.DownArrow) || Time.time - lastFall >= Speed)
         {
+            buttonDownTime += Time.deltaTime;
             transform.position -= new Vector3(0, 1, 0);
             if (isValidGrifPos())
             {
@@ -82,24 +86,37 @@ public class Groups : MonoBehaviour
 
                 //已经到位开始删除行
                 Grid.deleteFullRow();
+                isSpeedUp = true;
 
 
-                FindObjectOfType<Spawner>().Instances();
-                enabled = false;
+                    if (buttonDownTime>0.5f)
+                    {
+                        Spawner.instance.isCreatGrid = true;
+                        isSpeedUp = false;
+                        enabled = false;
+                        buttonDownTime = 0;
+                    }
+                // Debug.Log("Game staet");
+                // FindObjectOfType<Spawner>().isCreatGrid;
+
                 // StartCoroutine(stupScript());
             }
-
-
             lastFall = Time.time;
-            //     if (Input.GetKeyUp(KeyCode.DownArrow))
-            // {
-            //     Speed = 1f;
-            // }
-
+            
         }
 
+        if (Input.GetKeyUp(KeyCode.DownArrow) && isSpeedUp)
+        {
+            buttonDownTime = 0;
+            Spawner.instance.isCreatGrid = true;
+            isSpeedUp = false;
+            enabled = false;
+        }
 
+        // if (isSpeedUp)
+        // {
 
+        // }
     }
 
     public bool isValidGrifPos()

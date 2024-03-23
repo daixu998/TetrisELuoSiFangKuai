@@ -10,9 +10,22 @@ public class Spawner : MonoBehaviour
     public GameObject[] specialPrefabs;
     public bool isGameOver = true;
     public static bool isSpecial = false;
+    public bool isCreatGrid = true;
+
+    public static Spawner instance;
+
+    public Spawner()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+    }
 
     void Start()
     {
+
         Instances();
         Debug.Log(Grid.grid.Length);
 
@@ -23,7 +36,10 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (isCreatGrid)
+        {
+            Instances();
+        }
 
     }
     /// <summary>
@@ -37,11 +53,16 @@ public class Spawner : MonoBehaviour
         {
             return;
         }
+        // if (!isCreatGrid)
+        // {
+        //     return;
+        // }
+
         if (isSpecial)
         {
             int i = Random.Range(0, specialPrefabs.Length);
             GameObject prefab = specialPrefabs[i];
-            GameObject instance = Instantiate(prefab,gridPrat);
+            GameObject instance = Instantiate(prefab, gridPrat);
             instance.transform.position = transform.position;
             instance.transform.SetParent(gridPrat);
             isSpecial = false;
@@ -50,21 +71,22 @@ public class Spawner : MonoBehaviour
         {
             int i = Random.Range(0, prefabs.Length);
             GameObject prefab = prefabs[i];
-            GameObject instance = Instantiate(prefab,gridPrat);
-            
+            GameObject instance = Instantiate(prefab, gridPrat);
+
             instance.transform.position = transform.position;
             instance.transform.SetParent(gridPrat);
         }
-
+        isCreatGrid = false;
     }
 
 
-     public void disGrid(){
+    public void disGrid()
+    {
         for (int i = 0; i < gridPrat.childCount; i++)
         {
-         Destroy (gridPrat.GetChild(i).gameObject);
+            Destroy(gridPrat.GetChild(i).gameObject);
         }
-     }
+    }
 
 
 
