@@ -698,6 +698,12 @@ MonoBehaviour:
   specialPrefabs:
   - {fileID: 4376275020730811385, guid: 87601fd028b3e5642a7266bded4c5357, type: 3}
   isGameOver: 1
+  isCreatGrid: 0
+  removeRows: 
+  isRemove: 0
+  isPlayAni: 0
+  removeCount: 0
+  removeRow: 0
 --- !u!4 &796875432
 Transform:
   m_ObjectHideFlags: 0
@@ -706,7 +712,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 796875430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 20, z: 0}
+  m_LocalPosition: {x: 4, y: 19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

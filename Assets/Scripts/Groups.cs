@@ -71,9 +71,9 @@ public class Groups : MonoBehaviour
         }
         //向下
 
-        else if (Input.GetKey(KeyCode.DownArrow) || Time.time - lastFall >= Speed)
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
-            buttonDownTime += Time.deltaTime;
+            buttonDownTime+=Time.deltaTime;
             transform.position -= new Vector3(0, 1, 0);
             if (isValidGrifPos())
             {
@@ -85,24 +85,44 @@ public class Groups : MonoBehaviour
                 transform.position += new Vector3(0, 1, 0);
 
                 //已经到位开始删除行
-                Grid.deleteFullRow();
+                Spawner.instance.isRemove = true;
                 isSpeedUp = true;
 
 
-                    if (buttonDownTime>0.5f)
-                    {
-                        Spawner.instance.isCreatGrid = true;
-                        isSpeedUp = false;
-                        enabled = false;
-                        buttonDownTime = 0;
-                    }
-                // Debug.Log("Game staet");
-                // FindObjectOfType<Spawner>().isCreatGrid;
+                if (buttonDownTime > 0.5f)
+                {
+                    Spawner.instance.isCreatGrid = true;
 
-                // StartCoroutine(stupScript());
+                    enabled = false;
+                    buttonDownTime = 0;
+                }
+
+            }
+
+        }
+        else if (Time.time - lastFall >= Speed)
+        {
+            transform.position -= new Vector3(0, 1, 0);
+            if (isValidGrifPos())
+            {
+                updateGrid();
+
+            }
+            else
+            {
+                transform.position += new Vector3(0, 1, 0);
+
+                //已经到位开始删除行
+                 Spawner.instance.isRemove = true;
+                isSpeedUp = true;
+
+                Spawner.instance.isCreatGrid = true;
+
+                enabled = false;
+
+
             }
             lastFall = Time.time;
-            
         }
 
         if (Input.GetKeyUp(KeyCode.DownArrow) && isSpeedUp)
@@ -113,11 +133,37 @@ public class Groups : MonoBehaviour
             enabled = false;
         }
 
-        // if (isSpeedUp)
-        // {
 
-        // }
     }
+
+    // public void GridDown()
+    // {
+
+    //     transform.position -= new Vector3(0, 1, 0);
+    //     if (isValidGrifPos())
+    //     {
+    //         updateGrid();
+
+    //     }
+    //     else
+    //     {
+    //         transform.position += new Vector3(0, 1, 0);
+
+    //         //已经到位开始删除行
+    //         Spawner.instance.deleteFullRow();
+    //         isSpeedUp = true;
+
+
+    //         // if (buttonDownTime > 0.5f)
+    //         // {
+    //         Spawner.instance.isCreatGrid = true;
+    //         // isSpeedUp = false;
+    //         enabled = false;
+    //         buttonDownTime = 0;
+
+    //     }
+    //     lastFall = Time.time;
+    // }
 
     public bool isValidGrifPos()
     {

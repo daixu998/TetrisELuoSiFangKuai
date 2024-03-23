@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO.Compression;
 using UnityEngine;
-
+using UnityEngine;
 public class Grid : MonoBehaviour
 {
     public static int w = 10;
-    public static int h = 21;
+    public static int h = 23;
 
     public static Transform[,] grid = new Transform[w, h];
+
+    
+
+
 
     public static Vector2 roundVec2(Vector2 vector2)
     {
@@ -62,7 +66,7 @@ public class Grid : MonoBehaviour
 
                 Grid.grid[i, y].GetComponent<Animator>().SetBool("SizeWave", true);
                 // 将当前列的格子置为null
-                Destroy(Grid.grid[i, y].gameObject, 1.0f);
+                Destroy(Grid.grid[i, y].gameObject, 0.4f);
 
 
 
@@ -106,60 +110,46 @@ public class Grid : MonoBehaviour
 
         }
     }
-    void delayOpen()
-    {
-        // decreaseRowAbove(i + 1);
-    }
-    public static async void deleteFullRow()
-    {
+
+    // public static async void deleteFullRow()
+    // {
 
 
-        int row = 0;
-        for (int i = 0; i < h;)
-        {
-            if (isTS(i))
-            {
-                deletRow(i);
-                row++;
-                // MonoBehaviour.Invoke("delayOpen", 1);
-                 decreaseRowAbove(i + 1);
-            }
-            else
-            if (isFullRow(i))
-            {
-                deletRow(i);
-                row++;
-                decreaseRowAbove(i + 1);
-            }
-            else
-            {
-                i++;
-            }
-        }
-        FindObjectOfType<GUIManager>().addGrade(row);
-        if (row >= 2)
-        {
-            Spawner.isSpecial = true;
-        }
-    }
+    //     int row = 0;
+    //     for (int i = 0; i < h;)
+    //     {
+    //         if (isTS(i))
+    //         {
+    //             deletRow(i);
+    //             row++;
+    //             // MonoBehaviour.Invoke("delayOpen", 1);
+    //              decreaseRowAbove(i + 1);
+    //         }
+    //         else
+    //         if (isFullRow(i))
+    //         {
+    //             deletRow(i);
+    //             row++;
+                
+    //             decreaseRowAbove(i + 1);
+    //         }
+    //         else
+    //         {
+    //             i++;
+    //         }
+    //     }
+    //     FindObjectOfType<GUIManager>().addGrade(row);
+    //     if (row >= 2)
+    //     {
+    //         Spawner.isSpecial = true;
+    //     }
+    // }
 
 
     //重置游戏
     public static void resetGrid()
     {
-        // for (int x = 0; x < w; ++x)
-        // {
-        //     for (int y = 0; y < h; ++y)
-        //     {
-        //         if (grid[x, y]!=null)
-        //         {
-        //             Destroy(Grid.grid[x, y].gameObject);
-        //         }
 
-        //         grid[x,y] =null;
-
-        //     }
-        // }
         FindObjectOfType<Spawner>().disGrid();
         grid = new Transform[w, h];
         FindObjectOfType<Spawner>().isGameOver = true;
