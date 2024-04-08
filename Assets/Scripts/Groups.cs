@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Groups : MonoBehaviour
 {
@@ -8,10 +9,20 @@ public class Groups : MonoBehaviour
     public float Speed = 1f;
     public bool isSpeedUp = false;
     private float buttonDownTime = 0;
+
+    public Button leftBtn, rightBtn, upBtn, downBtn;
     // Start is called before the first frame update
 
     void Start()
     {
+        leftBtn = GameObject.Find("LeftBtn").GetComponent<Button>();
+        leftBtn.onClick.AddListener(GridLeft);
+        rightBtn = GameObject.Find("RightBtn").GetComponent<Button>();
+        rightBtn.onClick.AddListener(GridRight);
+        upBtn = GameObject.Find("UpBtn").GetComponent<Button>();
+        upBtn.onClick.AddListener(GridUp);
+        downBtn = GameObject.Find("DownBtn").GetComponent<Button>();
+        downBtn.onClick.AddListener(GridDown);
         if (isValidGrifPos())
         {
             // Debug.Log("Game staet");
@@ -26,6 +37,10 @@ public class Groups : MonoBehaviour
 
 
     }
+    void FixedUpdate()
+    {
+        
+    }
 
     // Update is called once per frame
     void Update()
@@ -33,71 +48,28 @@ public class Groups : MonoBehaviour
         //向左
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            transform.position += new Vector3(-1, 0, 0);
-            if (isValidGrifPos())
-            {
-                updateGrid();
-
-            }
-            else
-            { transform.position += new Vector3(1, 0, 0); }
+            // GridLeft();
+            GridMove(new Vector3(-1, 0, 0),1);
         }
-
         //向右
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            transform.position += new Vector3(1, 0, 0);
-            if (isValidGrifPos())
-            {
-                updateGrid();
+            // GridRight();
+             GridMove(new Vector3(1, 0, 0),1);
 
-            }
-            else
-            { transform.position -= new Vector3(1, 0, 0); }
         }
         //旋转
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            transform.Rotate(0, 0, 90);
-            if (isValidGrifPos())
-            {
-                updateGrid();
-
-            }
-            else
-            {
-                transform.Rotate(0, 0, -90);
-            }
+            GridUp();
         }
         //向下
 
-        else if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            buttonDownTime+=Time.deltaTime;
-            transform.position -= new Vector3(0, 1, 0);
-            if (isValidGrifPos())
-            {
-                updateGrid();
+            GridDown();
+            //  GridMove(new Vector3(0, -1, 0),3);
 
-            }
-            else
-            {
-                transform.position += new Vector3(0, 1, 0);
-
-                //已经到位开始删除行
-                Spawner.instance.isRemove = true;
-                isSpeedUp = true;
-
-
-                if (buttonDownTime > 0.5f)
-                {
-                    Spawner.instance.isCreatGrid = true;
-
-                    enabled = false;
-                    buttonDownTime = 0;
-                }
-
-            }
 
         }
         else if (Time.time - lastFall >= Speed)
@@ -113,7 +85,7 @@ public class Groups : MonoBehaviour
                 transform.position += new Vector3(0, 1, 0);
 
                 //已经到位开始删除行
-                 Spawner.instance.isRemove = true;
+                Spawner.instance.isRemove = true;
                 isSpeedUp = true;
 
                 Spawner.instance.isCreatGrid = true;
@@ -124,46 +96,118 @@ public class Groups : MonoBehaviour
             }
             lastFall = Time.time;
         }
+        // else if (Input.GetKeyUp(KeyCode.DownArrow))
+        // {
+        //     buttonDownTime = 0;
 
-        if (Input.GetKeyUp(KeyCode.DownArrow) && isSpeedUp)
-        {
-            buttonDownTime = 0;
-            Spawner.instance.isCreatGrid = true;
-            isSpeedUp = false;
-            enabled = false;
-        }
+        //     Spawner.instance.isCreatGrid = true;
+        //     isSpeedUp = false;
+        //     enabled = false;
+        // }
+
+        // if (Input.GetKeyUp(KeyCode.DownArrow) && isSpeedUp)
+        // {
+        //     buttonDownTime = 0;
+        //     Spawner.instance.isCreatGrid = true;
+        //     isSpeedUp = false;
+        //     enabled = false;
+        // }
 
 
     }
 
-    // public void GridDown()
-    // {
+    public void GridMove(Vector3 dir,int speed)
+    {
+ 
+        transform.position += dir*speed;
+        if (isValidGrifPos())
+        {
+            updateGrid();
 
-    //     transform.position -= new Vector3(0, 1, 0);
-    //     if (isValidGrifPos())
-    //     {
-    //         updateGrid();
+        }
+        else
+        { transform.position -= dir*speed; }
+ 
+    }
+    public void GridLeft()
+    {
+        if (this.enabled)
+        {
+            
+        
+        transform.position += new Vector3(-1, 0, 0);
+        if (isValidGrifPos())
+        {
+            updateGrid();
 
-    //     }
-    //     else
-    //     {
-    //         transform.position += new Vector3(0, 1, 0);
+        }
+        else
+        { 
+            transform.position += new Vector3(1, 0, 0);
+        }
+        }
+    }
+    public void GridRight()
+    {
+        if (this.enabled)
+        {
+        transform.position += new Vector3(1, 0, 0);
+        if (isValidGrifPos())
+        {
+            updateGrid();
 
-    //         //已经到位开始删除行
-    //         Spawner.instance.deleteFullRow();
-    //         isSpeedUp = true;
+        }
+        else
+        { transform.position -= new Vector3(1, 0, 0); }
+        }
+    }
+    public void GridUp()
+    {
+        if (this.enabled)
+        {
+        transform.Rotate(0, 0, 90);
+        if (isValidGrifPos())
+        {
+            updateGrid();
+
+        }
+        else
+        {
+            transform.Rotate(0, 0, -90);
+        }}
+    }
+    public void GridDown()
+    {
+        if (!this.enabled)
+        {
+        return;
+        }
+        buttonDownTime += Time.deltaTime;
+        transform.position -= new Vector3(0, 1, 0);
+        if (isValidGrifPos())
+        {
+            updateGrid();
+
+        }
+        else
+        {
+            transform.position += new Vector3(0, 1, 0);
+
+            //已经到位开始删除行
+            Spawner.instance.isRemove = true;
+            isSpeedUp = true;
 
 
-    //         // if (buttonDownTime > 0.5f)
-    //         // {
-    //         Spawner.instance.isCreatGrid = true;
-    //         // isSpeedUp = false;
-    //         enabled = false;
-    //         buttonDownTime = 0;
+            if (buttonDownTime > 0.5f)
+            {
+                Spawner.instance.isCreatGrid = true;
 
-    //     }
-    //     lastFall = Time.time;
-    // }
+                enabled = false;
+                buttonDownTime = 0;
+            }
+
+        }
+    }
 
     public bool isValidGrifPos()
     {

@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
+    public Button startButton;
+    public GameState gameState;
     public static GameManager instance;
+
+
     public enum GameState
     {
         Playing,
@@ -19,11 +24,18 @@ public class GameManager : MonoBehaviour
         GameOver
     }
 
+    public enum GameDir
+    {
+        UP,DOWN,LEFT,RIGHT,NELL
+    }
+
+    public GameDir gameDir = GameDir.NELL;
+
     private GameManager()
     {
         if (instance == null)
         {
-            instance = new GameManager();
+            instance = this;
         }
         else
         {
@@ -31,5 +43,22 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+    }
+    void Start()
+    {
+        startButton.onClick.AddListener(StartScene);
+    }
+    public void StartScene(){
+        SceneManager.LoadScene(1);
+    }
+
+    public void GoAppScene()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void QuitScene()
+    {
+       UnityEngine.Application.Quit();
     }
 }

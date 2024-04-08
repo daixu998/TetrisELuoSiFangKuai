@@ -11,7 +11,7 @@ public class Spawner : MonoBehaviour
     public bool isGameOver = true;
     public static bool isSpecial = false;
     public bool isCreatGrid = true;
-    public List<int> removeRows;
+    // public List<int> removeRows;
     public static Spawner instance;
 
     public bool isRemove = false;
@@ -51,10 +51,6 @@ public class Spawner : MonoBehaviour
             deleteFullRow();
         }
 
-        // if (isPlayAni)
-        // {
-            
-        // }
     }
 
 

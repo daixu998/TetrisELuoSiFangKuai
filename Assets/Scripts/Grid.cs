@@ -10,7 +10,7 @@ public class Grid : MonoBehaviour
 
     public static Transform[,] grid = new Transform[w, h];
 
-    
+    public static Transform[,] staticeGrid = new Transform[w, h];
 
 
 
@@ -111,39 +111,6 @@ public class Grid : MonoBehaviour
         }
     }
 
-    // public static async void deleteFullRow()
-    // {
-
-
-    //     int row = 0;
-    //     for (int i = 0; i < h;)
-    //     {
-    //         if (isTS(i))
-    //         {
-    //             deletRow(i);
-    //             row++;
-    //             // MonoBehaviour.Invoke("delayOpen", 1);
-    //              decreaseRowAbove(i + 1);
-    //         }
-    //         else
-    //         if (isFullRow(i))
-    //         {
-    //             deletRow(i);
-    //             row++;
-                
-    //             decreaseRowAbove(i + 1);
-    //         }
-    //         else
-    //         {
-    //             i++;
-    //         }
-    //     }
-    //     FindObjectOfType<GUIManager>().addGrade(row);
-    //     if (row >= 2)
-    //     {
-    //         Spawner.isSpecial = true;
-    //     }
-    // }
 
 
     //重置游戏

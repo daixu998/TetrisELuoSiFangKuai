@@ -12,6 +12,8 @@ public class GUIManager : MonoBehaviour
     public GameObject gameOver;
 
     public Button startGameBtn;
+
+    public Button  up,down,left,right;
     int grade = 0;
     float gametime = 0;
     // Start is called before the first frame update
@@ -20,6 +22,10 @@ public class GUIManager : MonoBehaviour
         gradeText.text = "0";
         gameOver.active = false;
         startGameBtn.transform.gameObject.SetActive(false);
+        up.onClick.AddListener(()=> GameManager.instance.gameDir = GameManager.GameDir.UP);
+        down.onClick.AddListener(()=> GameManager.instance.gameDir = GameManager.GameDir.DOWN);
+        left.onClick.AddListener( ()=> GameManager.instance.gameDir = GameManager.GameDir.LEFT);
+        right.onClick.AddListener( ()=> GameManager.instance.gameDir = GameManager.GameDir.RIGHT);
     }
 
     // Update is called once per frame
@@ -28,6 +34,11 @@ public class GUIManager : MonoBehaviour
         UpdateStopwatchDisplay();
 
         gametime += Time.deltaTime;
+
+        if (!Input.anyKeyDown)
+        {
+            GameManager.instance.gameDir = GameManager.GameDir.NELL;
+        }
     }
 
     void UpdateStopwatchDisplay()
@@ -75,5 +86,6 @@ public class GUIManager : MonoBehaviour
         gameOver.active = false;
         gametime = 0;
         startGameBtn.transform.gameObject.SetActive(false);
+        Spawner.instance.isGameOver = true;
     }
 }
