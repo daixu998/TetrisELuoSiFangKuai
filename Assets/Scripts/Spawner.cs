@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,8 @@ public class Spawner : MonoBehaviour
     public bool isPlayAni = false;
     public int removeCount = 0;
     public int removeRow = 0;
+
+   
     public Spawner()
     {
         if (instance == null)
@@ -55,8 +58,33 @@ public class Spawner : MonoBehaviour
         {
             deleteFullRow();
         }
+        // if (NextLeve())
+        // {
+        //     //游戏胜利
+        //     // GameManager.instance.gameState = GameManager.GameState.GameOver;
+        //      FindObjectOfType<GUIManager>().gameOverr();
+        // }
 
     }
+    public bool NextLeve()
+    {
+         for (int x = 0; x < Grid.w; x++)
+        {
+            for (int y = 0; y < Grid.h - 10; y++)
+            {
+               if ( staticGrids[x, y].HP > 0)
+               {
+                     return false;
+               }
+ 
+              
+            }
+        }
+        return true;
+    }
+
+
+
     /// <summary>
     /// 随机生成
     /// </summary> <summary>

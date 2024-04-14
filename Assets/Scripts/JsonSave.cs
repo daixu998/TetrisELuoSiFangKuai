@@ -6,22 +6,19 @@ using System.IO;
 using System;
 using UnityEditor;
 using Unity.VisualScripting;
+using TMPro;
 
 
 
-[System.Serializable]//注意命名空间
-public class Save //这是Save类
-{
-    public int[] ints;
 
-}
 public class JsonSave : MonoBehaviour
-{
-    Save JsonSaveObject = new Save();//声明Save对象，记录当前的游戏状态
+{ 
+    public TMP_InputField inputField;   
+     Save JsonSaveObject = new Save();//声明Save对象，记录当前的游戏状态
 
 
      void Start() {
-        JsonSaveObject.ints = new int[(Grid.h)*(Grid.w)];
+        JsonSaveObject.ints0 = new int[(Grid.h)*(Grid.w)];
 
     }
     public void Save()//保存函数
@@ -33,10 +30,10 @@ public class JsonSave : MonoBehaviour
                 if (Spawner.instance.staticGrids[i,j])
                 {
 
-                     JsonSaveObject.ints[j*Grid.w + i] =Spawner.instance.staticGrids[i,j].HP;
+                     JsonSaveObject.ints0[j*Grid.w + i] =Spawner.instance.staticGrids[i,j].HP;
                 }else
                 {
-                      JsonSaveObject.ints[j*Grid.w + i] =0;
+                      JsonSaveObject.ints0[j*Grid.w + i] =0;
                 }
                 
                 
@@ -82,7 +79,31 @@ public class JsonSave : MonoBehaviour
             for (int j = 0; j < Grid.h; j++) {
                 if ( Spawner.instance.staticGrids[i,j])
                 {
-                    Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints[j*Grid.w + i];
+                   if (inputField.text =="0")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints0 [j*Grid.w + i];
+                    }else if (inputField.text =="1")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints1 [j*Grid.w + i];
+                    }else if (inputField.text =="2")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints2 [j*Grid.w + i];
+                    }
+                    else if (inputField.text =="3")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints3 [j*Grid.w + i];
+                    }else if (inputField.text =="4")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints4 [j*Grid.w + i];
+                    }else if (inputField.text =="5")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints5 [j*Grid.w + i];
+                    }else if (inputField.text =="6")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints6 [j*Grid.w + i];
+                    }else if (inputField.text =="7")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints7 [j*Grid.w + i];
+                    }else if (inputField.text =="8")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints8 [j*Grid.w + i];
+                    }else if (inputField.text =="9")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints9 [j*Grid.w + i];
+                    }else if (inputField.text =="10")
+                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints0 [j*Grid.w + i];
+                    } 
+                    
                     if (Spawner.instance.staticGrids[i,j].HP>0)
                     {
                         Spawner.instance.staticGrids[i,j].render.SetActive(true);
@@ -105,9 +126,5 @@ public class JsonSave : MonoBehaviour
 
  
     }
-//     private void Start()
-//     {
-//         Save();
-//         Load();
-//     }
+
 }
