@@ -46,7 +46,11 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        startButton.onClick.AddListener(StartScene);
+        if (startButton!= null)
+        {
+             startButton.onClick.AddListener(StartScene);
+        }
+       
     }
     public void StartScene(){
         SceneManager.LoadScene(1);
@@ -60,5 +64,10 @@ public class GameManager : MonoBehaviour
     public void QuitScene()
     {
        UnityEngine.Application.Quit();
+    }
+
+    public void GoScene(int sceneIndex)
+    {
+         SceneManager.LoadScene(sceneIndex);
     }
 }

@@ -63,8 +63,11 @@ public class Grid : MonoBehaviour
             // 销毁当前列的格子
             if (Grid.grid[i, y] != null)
             {
-
-                Grid.grid[i, y].GetComponent<Animator>().SetBool("SizeWave", true);
+                if (Grid.grid[i, y].GetComponent<Animator>().GetBool("SizeWave"))
+                {
+                     Grid.grid[i, y].GetComponent<Animator>().SetBool("SizeWave", true);
+                }    
+               
                 // 将当前列的格子置为null
                 Destroy(Grid.grid[i, y].gameObject, 0.4f);
 

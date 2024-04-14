@@ -8,6 +8,11 @@ public class Spawner : MonoBehaviour
     public Transform gridPrat;
     public GameObject[] prefabs;
     public GameObject[] specialPrefabs;
+
+    public GameObject guangquanPrefab;
+    // [System.Serializable]
+    public StaticGrid[,] staticGrids = new StaticGrid[Grid.w, Grid.h];
+
     public bool isGameOver = true;
     public static bool isSpecial = false;
     public bool isCreatGrid = true;
@@ -33,14 +38,14 @@ public class Spawner : MonoBehaviour
         Instances();
         Debug.Log(Grid.grid.Length);
 
-        //  isGameOver = true;
+        instancesGuangQuan();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isCreatGrid&&!isPlayAni)
+        if (isCreatGrid && !isPlayAni)
         {
             Instances();
         }
@@ -52,9 +57,82 @@ public class Spawner : MonoBehaviour
         }
 
     }
+    /// <summary>
+    /// 随机生成
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    public void instancesGuangQuan()
+    {
 
 
-    public  void deleteFullRow()
+        for (int x = 0; x < Grid.w; x++)
+        {
+            for (int y = 0; y < Grid.h - 10; y++)
+            {
+                var quan = GameObject.Instantiate(guangquanPrefab, new Vector3(x, y, 0), Quaternion.identity);
+
+                quan.transform.GetComponentInChildren<StaticGrid>().HP = 0;
+                
+
+                staticGrids[x, y] = quan.transform.GetComponentInChildren<StaticGrid>();
+                quan.transform.SetParent(transform);
+            }
+        }
+    }
+
+        /// <summary>
+    /// 随机生成
+    /// </summary> <summary>
+    public void RandominstancesGuangQuan()
+    {
+
+
+        for (int x = 0; x < Grid.w; x++)
+        {
+            for (int y = 0; y < Grid.h - 10; y++)
+            {
+                var quan = GameObject.Instantiate(guangquanPrefab, new Vector3(x, y, 0), Quaternion.identity);
+                if (Random.Range(0, 90) > 70)
+                {
+                    quan.transform.GetComponentInChildren<StaticGrid>().HP = Random.Range(0, 10);
+                }
+                else
+                {
+                    quan.transform.GetComponentInChildren<StaticGrid>().HP = 0;
+                }
+
+                staticGrids[x, y] = quan.transform.GetComponentInChildren<StaticGrid>();
+                quan.transform.SetParent(transform);
+            }
+        }
+    }
+    public void SeveGuangQuan()
+    {
+        for (int x = 0; x < Grid.w; x++)
+        {
+            for (int y = 0; y < Grid.h; y++)
+            {
+                if (staticGrids[x, y].HP > 0)
+                {
+                    // staticGrids[x, y].Save();
+                }
+            }
+        }
+    }
+
+    public void LoadGuangQuan()
+    {
+    }
+
+    public void removeGuangQuan(int y)
+    {
+        for (int x = 0; x < Grid.w; x++)
+        {
+            staticGrids[x, y].HP--;
+        }
+    }
+    public void deleteFullRow()
     {
         removeCount = 0;
 
@@ -64,29 +142,19 @@ public class Spawner : MonoBehaviour
             if (Grid.isTS(i))
             {
                 Grid.deletRow(i);
-                
-                // MonoBehaviour.Invoke("delayOpen", 1);
-                // isPlayAni = true;
-                // removeRows.Add(i);
-
-                // removeRow = i;
-                //  Grid.decreaseRowAbove(i+1);
-                StartCoroutine(PlayAniOver(i+1-removeCount,0.4f));
+                removeGuangQuan(i);
+                StartCoroutine(PlayAniOver(i + 1 - removeCount, 0.4f));
                 removeCount++;
-                // Grid.decreaseRowAbove(i + 1);
+
             }
             else
             if (Grid.isFullRow(i))
             {
                 Grid.deletRow(i);
-                
-                // Grid.decreaseRowAbove(i+1);
-                // isPlayAni = true;
-                // removeRows.Add(i);
-                // removeRow=i;
-                StartCoroutine(PlayAniOver(i+1-removeCount,0.4f));
+                removeGuangQuan(i);
+                StartCoroutine(PlayAniOver(i + 1 - removeCount, 0.4f));
                 removeCount++;
-                // Grid.decreaseRowAbove(i + 1);
+
             }
             else
             {
@@ -104,16 +172,16 @@ public class Spawner : MonoBehaviour
         }
         removeCount = 0;
         isRemove = false;
-         
+
     }
-    IEnumerator PlayAniOver(int y ,float time)
+    IEnumerator PlayAniOver(int y, float time)
     {
         // Grid.deletRow(y);
         yield return new WaitForSeconds(time);
         Grid.decreaseRowAbove(y);
         yield return new WaitForSeconds(0.2f);
         isPlayAni = false;
-       
+
     }
 
     // IEnumerator PlayAniOver1(int y)
@@ -131,7 +199,7 @@ public class Spawner : MonoBehaviour
     //         }
     //     removeRows = new List<int>();
     //     isPlayAni = false;
-       
+
     // }
     /// <summary>
     /// 生成新格子的方法

@@ -15,14 +15,14 @@ public class Groups : MonoBehaviour
 
     void Start()
     {
-        leftBtn = GameObject.Find("LeftBtn").GetComponent<Button>();
-        leftBtn.onClick.AddListener(GridLeft);
-        rightBtn = GameObject.Find("RightBtn").GetComponent<Button>();
-        rightBtn.onClick.AddListener(GridRight);
-        upBtn = GameObject.Find("UpBtn").GetComponent<Button>();
-        upBtn.onClick.AddListener(GridUp);
-        downBtn = GameObject.Find("DownBtn").GetComponent<Button>();
-        downBtn.onClick.AddListener(GridDown);
+        // leftBtn = GameObject.Find("LeftBtn").GetComponent<Button>();
+        // leftBtn.onClick.AddListener(GridLeft);
+        // rightBtn = GameObject.Find("RightBtn").GetComponent<Button>();
+        // rightBtn.onClick.AddListener(GridRight);
+        // upBtn = GameObject.Find("UpBtn").GetComponent<Button>();
+        // upBtn.onClick.AddListener(GridUp);
+        // downBtn = GameObject.Find("DownBtn").GetComponent<Button>();
+        // downBtn.onClick.AddListener(GridDown);
         if (isValidGrifPos())
         {
             // Debug.Log("Game staet");
@@ -46,6 +46,10 @@ public class Groups : MonoBehaviour
     void Update()
     {
         //向左
+        if (Spawner.instance.isPlayAni)
+        {
+            return;
+        }else
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             // GridLeft();
@@ -96,22 +100,6 @@ public class Groups : MonoBehaviour
             }
             lastFall = Time.time;
         }
-        // else if (Input.GetKeyUp(KeyCode.DownArrow))
-        // {
-        //     buttonDownTime = 0;
-
-        //     Spawner.instance.isCreatGrid = true;
-        //     isSpeedUp = false;
-        //     enabled = false;
-        // }
-
-        // if (Input.GetKeyUp(KeyCode.DownArrow) && isSpeedUp)
-        // {
-        //     buttonDownTime = 0;
-        //     Spawner.instance.isCreatGrid = true;
-        //     isSpeedUp = false;
-        //     enabled = false;
-        // }
 
 
     }
