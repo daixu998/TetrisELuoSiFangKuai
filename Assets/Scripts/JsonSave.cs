@@ -7,6 +7,7 @@ using System;
 using UnityEditor;
 using Unity.VisualScripting;
 using TMPro;
+using Newtonsoft.Json;
 
 
 
@@ -14,55 +15,55 @@ using TMPro;
 public class JsonSave : MonoBehaviour
 { 
     public TMP_InputField inputField;   
-     Save JsonSaveObject = new Save();//声明Save对象，记录当前的游戏状态
+    //  Save JsonSaveObject = new Save();//声明Save对象，记录当前的游戏状态
 
 
      void Start() {
-        JsonSaveObject.ints0 = new int[(Grid.h)*(Grid.w)];
+        // JsonSaveObject.ints0 = new int[(Grid.h)*(Grid.w)];
 
     }
-    public void Save()//保存函数
-    {
+    // public void Save()//保存函数
+    // {
         
        
-        for (int i = 0; i < Grid.w; i++) {
-            for (int j = 0; j < Grid.h; j++) {
-                if (Spawner.instance.staticGrids[i,j])
-                {
+    //     for (int i = 0; i < Grid.w; i++) {
+    //         for (int j = 0; j < Grid.h; j++) {
+    //             if (Spawner.instance.staticGrids[i,j])
+    //             {
 
-                     JsonSaveObject.ints0[j*Grid.w + i] =Spawner.instance.staticGrids[i,j].HP;
-                }else
-                {
-                      JsonSaveObject.ints0[j*Grid.w + i] =0;
-                }
+    //                  JsonSaveObject.ints0[j*Grid.w + i] =Spawner.instance.staticGrids[i,j].HP;
+    //             }else
+    //             {
+    //                   JsonSaveObject.ints0[j*Grid.w + i] =0;
+    //             }
                 
                 
                 
-            }
-        }
+    //         }
+    //     }
         
  
-        //这里一定要注意需要字段为public权限，不然会导致转换不成功！！！
-        string ObjectStr = JsonUtility.ToJson(JsonSaveObject,true);//将Save对象序列化为Json类型的字符串
-        string path = Application.streamingAssetsPath + "ByJson.json";//这是保存的路径
-        // string path =Application.dataPath + "ByJson.json";//这是保存的路径
-        using (StreamWriter writer = new StreamWriter(path))
-        {
-            writer.WriteLine(ObjectStr);
-            writer.Close();
-            writer.Dispose();
-        }
-        // AssetDatabase.Refresh();
-        Debug.Log("保存成功");
+    //     //这里一定要注意需要字段为public权限，不然会导致转换不成功！！！
+    //     string ObjectStr = JsonUtility.ToJson(JsonSaveObject,true);//将Save对象序列化为Json类型的字符串
+    //     string path = Application.streamingAssetsPath + "ByJson.json";//这是保存的路径
+    //     // string path =Application.dataPath + "ByJson.json";//这是保存的路径
+    //     using (StreamWriter writer = new StreamWriter(path))
+    //     {
+    //         writer.WriteLine(ObjectStr);
+    //         writer.Close();
+    //         writer.Dispose();
+    //     }
+    //     // AssetDatabase.Refresh();
+    //     Debug.Log("保存成功");
  
-        // //这里需要将字符串写入到文件中，因为JsonUtility.ToJson()方法是将字符串转换成Json类型的字符串，
-        // //而JsonUtility.ToJson()方法是将对象转换成Json类型的字符串，因此需要将字符串写入到文件中
+    //     // //这里需要将字符串写入到文件中，因为JsonUtility.ToJson()方法是将字符串转换成Json类型的字符串，
+    //     // //而JsonUtility.ToJson()方法是将对象转换成Json类型的字符串，因此需要将字符串写入到文件中
  
-        // //对象被转换成了字符串，这个时候还是需要写进文件中，因此
-        // StreamWriter writer = new StreamWriter(path);//创建文件流
-        // writer.Write(ObjectStr);//写入
-        // writer.Close();//关闭文件流       
-    }
+    //     // //对象被转换成了字符串，这个时候还是需要写进文件中，因此
+    //     // StreamWriter writer = new StreamWriter(path);//创建文件流
+    //     // writer.Write(ObjectStr);//写入
+    //     // writer.Close();//关闭文件流       
+    // }
  
     public void Load()//加载函数
     {
@@ -71,38 +72,16 @@ public class JsonSave : MonoBehaviour
         StreamReader reader = new StreamReader(path);//创建读取的文件流
         string ObjectStr = reader.ReadToEnd();//将文本文件中的内容全部读取到字符串中，（json格式其实就算字符串类型）
         reader.Close();//关闭流
-        Save JsonSaveObject = JsonMapper.ToObject<Save>(ObjectStr);//将json格式转化成对象
+        // Save JsonSaveObject = JsonMapper.ToObject<Save>(ObjectStr);//将json格式转化成对象
         //注意这里其实也可以不用读取流的方法，可以直接将json文件放在Resources文件夹下，因为文本在unity中时TextAssets类型，可以直接通过Resources来加载json文件
-
+        List<int[]> deserializedListOf2DArrays1 = JsonConvert.DeserializeObject<List<int[]>>(ObjectStr);
         
         for (int i = 0; i < Grid.w; i++) {
             for (int j = 0; j < Grid.h; j++) {
                 if ( Spawner.instance.staticGrids[i,j])
                 {
-                   if (inputField.text =="0")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints0 [j*Grid.w + i];
-                    }else if (inputField.text =="1")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints1 [j*Grid.w + i];
-                    }else if (inputField.text =="2")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints2 [j*Grid.w + i];
-                    }
-                    else if (inputField.text =="3")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints3 [j*Grid.w + i];
-                    }else if (inputField.text =="4")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints4 [j*Grid.w + i];
-                    }else if (inputField.text =="5")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints5 [j*Grid.w + i];
-                    }else if (inputField.text =="6")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints6 [j*Grid.w + i];
-                    }else if (inputField.text =="7")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints7 [j*Grid.w + i];
-                    }else if (inputField.text =="8")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints8 [j*Grid.w + i];
-                    }else if (inputField.text =="9")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints9 [j*Grid.w + i];
-                    }else if (inputField.text =="10")
-                    {Spawner.instance.staticGrids[i,j].HP  =JsonSaveObject.ints0 [j*Grid.w + i];
-                    } 
+                   
+                     Spawner.instance.staticGrids[i, j].HP = deserializedListOf2DArrays1[int.Parse(inputField.text)][j * Grid.w + i];
                     
                     if (Spawner.instance.staticGrids[i,j].HP>0)
                     {
@@ -114,14 +93,7 @@ public class JsonSave : MonoBehaviour
                 
             }
         }
-        // Spawner.instance.staticGrids[i,j]
-        // for (int i = 0; i < JsonSaveObject.ints.Length; i++)
-        // {
 
-
-        //      Debug.Log(JsonSaveObject.ints[i]);
-        // }
- 
        
 
  
